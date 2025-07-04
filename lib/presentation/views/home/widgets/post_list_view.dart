@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../cors/theme/app_colors.dart';
 import '../../../../domain/entities/post_entity.dart';
 
 class PostListView extends StatelessWidget {
@@ -11,16 +13,30 @@ class PostListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.separated(
       itemCount: posts.length,
-      padding: const EdgeInsets.all(12),
-      separatorBuilder: (_, __) => const SizedBox(height: 8),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      separatorBuilder: (_, __) => SizedBox(height: 12.h),
       itemBuilder: (context, index) {
         final post = posts[index];
-        return Card(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          elevation: 2,
-          child: ListTile(
-            title: Text(post.title),
-            subtitle: Text("ID: ${post.id} | User: ${post.userId}"),
+        return Container(
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(12.r),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 6,
+                offset: Offset(0, 3),
+              ),
+            ],
+          ),
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+          child: Text(
+            post.title,
+            style: TextStyle(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textPrimary,
+            ),
           ),
         );
       },

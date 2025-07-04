@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-
+import 'package:simple_post_app/presentation/views/widgets/custom_app_bar.dart';
+import '../../../../cors/theme/app_colors.dart';
 import '../../../viewmodels/home/home_viewmodel.dart';
 import '../widgets/post_list_view.dart';
 
@@ -10,41 +12,73 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Home")),
+      backgroundColor: AppColors.background,
+      appBar: CustomAppBar(title: "All Posts", showBackButton: false,),
       body: Consumer<HomeViewModel>(
         builder: (context, viewModel, child) {
           return RefreshIndicator(
             onRefresh: viewModel.refresh,
+            color: AppColors.buttonColor,
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(12.0),
+                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                   child: TextField(
-                    decoration: const InputDecoration(
-                      hintText: 'Search by title',
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.search),
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      color: AppColors.textPrimary,
                     ),
-                    onChanged: viewModel.updateSearch, // ✅ fixed
+                    decoration: InputDecoration(
+                      hintText: 'Search posts...',
+                      hintStyle: TextStyle(
+                        color: AppColors.textGraySecondary,
+                        fontSize: 14.sp,
+                      ),
+                      prefixIcon: Icon(Icons.search, size: 20.sp, color: AppColors.textGraySecondary),
+                      filled: true,
+                      fillColor: AppColors.cardBackground,
+                      contentPadding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.r),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                    onChanged: viewModel.updateSearch,
                   ),
                 ),
                 if (viewModel.isLoading)
-                  const Expanded(
-                    child: Center(child: CircularProgressIndicator()),
+                  Expanded(
+                    child: Center(
+                      child: SizedBox(
+                        height: 28.h,
+                        width: 28.h,
+                        child: const CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: AppColors.buttonColor,
+                        ),
+                      ),
+                    ),
                   )
                 else ...[
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: Text('Total: ${viewModel.filteredPosts.length} items'),
+                      child: Text(
+                        'Total: ${viewModel.filteredPosts.length} items',
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          color: AppColors.textGraySecondary,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 10.h),
                   Expanded(
                     child: PostListView(posts: viewModel.filteredPosts),
                   ),
-                ]
+                ],
               ],
             ),
           );
