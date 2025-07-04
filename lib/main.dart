@@ -9,6 +9,7 @@ import 'package:simple_post_app/presentation/viewmodels/app_providers.dart';
 import 'cors/di/injection.dart';
 import 'cors/routes/app_routes.dart';
 import 'cors/theme/app_theme.dart';
+import 'data/models/post_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,7 +17,10 @@ void main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   await Hive.initFlutter();
-  await Hive.openBox('data');
+  Hive.registerAdapter(PostModelAdapter());
+  await Hive.openBox('posts');
+
+
 
   await ScreenUtil.ensureScreenSize();
   await configureDependencies();

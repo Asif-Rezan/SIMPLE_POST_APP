@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:simple_post_app/presentation/views/add_screen/screen/add_screen.dart';
 import 'package:simple_post_app/presentation/views/home/screen/home_screen.dart';
 
 class ParentScreen extends StatefulWidget {
@@ -14,7 +15,7 @@ class _ParentScreenState extends State<ParentScreen> {
 
   final List<Widget> _pages = const [
     HomeScreen(),
-    Center(child: Text('Add Page')),
+    AddScreen(),
     Center(child: Text('Settings Page')),
   ];
 
