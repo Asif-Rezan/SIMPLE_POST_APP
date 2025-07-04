@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:simple_post_app/presentation/views/home/home_screen.dart';
+import 'package:simple_post_app/presentation/views/home/screen/home_screen.dart';
 
 class ParentScreen extends StatefulWidget {
   const ParentScreen({super.key});
