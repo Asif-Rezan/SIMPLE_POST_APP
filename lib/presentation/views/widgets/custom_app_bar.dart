@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../cors/theme/app_colors.dart';
 
-
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool showBackButton;
@@ -31,7 +30,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 alignment: Alignment.centerLeft,
                 child: GestureDetector(
                   onTap: onBack ?? () => Navigator.of(context).pop(),
-                  child: Image.asset('assets/icons/back_arrow.png', scale: 1.4),
+                  child: Image.asset('assets/icons/back.png', width: 20.w),
                 ),
               ),
             Center(
