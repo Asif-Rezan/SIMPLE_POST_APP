@@ -26,9 +26,26 @@ class AddScreen extends StatelessWidget {
                   decoration: const InputDecoration(labelText: "Body"),
                 ),
                 const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: viewModel.addPost,
-                  child: const Text("Add Post"),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: viewModel.isEditing
+                          ? () => viewModel.updatePost(viewModel.editingIndex)
+                          : viewModel.addPost,
+                      child: Text(viewModel.isEditing ? "Update Post" : "Add Post"),
+                    ),
+                    if (viewModel.isEditing)
+                      ElevatedButton(
+                        onPressed: () {
+                          viewModel.titleController.clear();
+                          viewModel.bodyController.clear();
+                          viewModel.setEditingPost(-1); // Clear editing state
+                          viewModel.notifyListeners();
+                        },
+                        child: const Text("Cancel"),
+                      ),
+                  ],
                 ),
                 const SizedBox(height: 20),
                 Expanded(
@@ -37,7 +54,23 @@ class AddScreen extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final post = viewModel.posts[index];
                       return Card(
-                        child: ListTile(title: Text(post.title)),
+                        child: ListTile(
+                          title: Text(post.title),
+                          subtitle: Text(post.body),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.edit),
+                                onPressed: () => viewModel.setEditingPost(index),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete),
+                                onPressed: () => viewModel.deletePost(index),
+                              ),
+                            ],
+                          ),
+                        ),
                       );
                     },
                   ),

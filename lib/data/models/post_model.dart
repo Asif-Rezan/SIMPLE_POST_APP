@@ -44,4 +44,11 @@ class PostModel extends PostEntity {
     title: entity.title,
     body: entity.body,
   );
+
+  PostEntity toEntity() => PostEntity(
+    userId: userId,
+    id: id,
+    title: title,
+    body: body,
+  );
 }

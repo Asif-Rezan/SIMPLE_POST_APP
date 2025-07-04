@@ -17,10 +17,6 @@ void main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   await Hive.initFlutter();
-  Hive.registerAdapter(PostModelAdapter());
-  await Hive.openBox('posts');
-
-
 
   await ScreenUtil.ensureScreenSize();
   await configureDependencies();

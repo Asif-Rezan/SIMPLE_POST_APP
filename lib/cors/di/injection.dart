@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../data/datasources/local_post_data_source.dart';
 import '../../data/datasources/post_remote_data_source.dart';
+import '../../data/models/post_model.dart';
 import '../../data/repositories/local_post_repository_impl.dart';
 import '../../data/repositories/post_repository_impl.dart';
 import '../../domain/repositories/local_post_repository.dart';
@@ -17,7 +19,11 @@ import '../services/remote/api_service.dart';
 final GetIt getIt = GetIt.instance;
 
 Future<void> configureDependencies() async {
-  final postBox = Hive.box('posts');
+  // Initialize Hive
+  final appDir = await getApplicationDocumentsDirectory();
+  Hive.init(appDir.path);
+  Hive.registerAdapter(PostModelAdapter());
+  final box = await Hive.openBox<PostModel>('posts');
 
   // Core
   getIt.registerLazySingleton<Dio>(() => Dio());
@@ -25,31 +31,47 @@ Future<void> configureDependencies() async {
 
   // Data sources
   getIt.registerLazySingleton<PostRemoteDataSource>(
-    () => PostRemoteDataSourceImpl(getIt<ApiService>()),
+        () => PostRemoteDataSourceImpl(getIt<ApiService>()),
+  );
+  getIt.registerLazySingleton<LocalPostDataSource>(
+        () => LocalPostDataSourceImpl(box),
   );
 
   // Repositories
   getIt.registerLazySingleton<PostRepository>(
-    () => PostRepositoryImpl(getIt<PostRemoteDataSource>()),
+        () => PostRepositoryImpl(getIt<PostRemoteDataSource>()),
+  );
+  getIt.registerLazySingleton<LocalPostRepository>(
+        () => LocalPostRepositoryImpl(getIt<LocalPostDataSource>()),
   );
 
   // Use cases
   getIt.registerLazySingleton<GetPostsUseCase>(
-    () => GetPostsUseCase(getIt<PostRepository>()),
+        () => GetPostsUseCase(getIt<PostRepository>()),
+  );
+  getIt.registerLazySingleton<AddLocalPostUseCase>(
+        () => AddLocalPostUseCase(getIt<LocalPostRepository>()),
+  );
+  getIt.registerLazySingleton<UpdateLocalPostUseCase>(
+        () => UpdateLocalPostUseCase(getIt<LocalPostRepository>()),
+  );
+  getIt.registerLazySingleton<DeleteLocalPostUseCase>(
+        () => DeleteLocalPostUseCase(getIt<LocalPostRepository>()),
+  );
+  getIt.registerLazySingleton<GetLocalPostsUseCase>(
+        () => GetLocalPostsUseCase(getIt<LocalPostRepository>()),
   );
 
   // ViewModels
   getIt.registerFactory<HomeViewModel>(
-    () => HomeViewModel(getIt<GetPostsUseCase>()),
+        () => HomeViewModel(getIt<GetPostsUseCase>()),
   );
-
-
-  getIt.registerLazySingleton<LocalPostDataSource>(() => LocalPostDataSourceImpl(postBox));
-  getIt.registerLazySingleton<LocalPostRepository>(() => LocalPostRepositoryImpl(getIt()));
-
-  getIt.registerLazySingleton(() => AddLocalPostUseCase(getIt()));
-  getIt.registerLazySingleton(() => GetLocalPostsUseCase(getIt()));
-
-  getIt.registerFactory(() => AddPostViewModel(getIt(), getIt()));
-
+  getIt.registerFactory<AddPostViewModel>(
+        () => AddPostViewModel(
+      getIt<AddLocalPostUseCase>(),
+      getIt<UpdateLocalPostUseCase>(),
+      getIt<DeleteLocalPostUseCase>(),
+      getIt<GetLocalPostsUseCase>(),
+    ),
+  );
 }
