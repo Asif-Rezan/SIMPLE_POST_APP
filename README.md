@@ -1,16 +1,20 @@
-# simple_post_app
+# Task Completion Summary
 
-A new Flutter project.
+### Core Tasks
 
-## Getting Started
+- **Home Screen:** Fetched and displayed posts with search, pull-to-refresh, and item count.
+- **Detail Screen:** Navigated to a detail view showing full post content with back navigation.
+- **Add/Edit:** Allowed adding, editing, and deleting posts with local storage using Hive.
+- **State Management:** Implemented using `Provider` with `clean architecture` structure.
+- **Error & Loading Handling:** Handled loading, errors, and empty states.
+- **Theming & Responsiveness:** Applied consistent theming and responsive layout using `flutter_screenutil`.
 
-This project is a starting point for a Flutter application.
+### Migration Task
 
-A few resources to get you started if this is your first Flutter project:
+- **Flutter Version Migration:** Downgraded to Flutter 3.0.0, verified functionality, then migrated to the latest stable version with changes documented in `MIGRATION_NOTES.md`.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+## Bonus Task
+
+- **Firebase Integration:** Configured Firebase Cloud Messaging (FCM) for push notifications.
